@@ -388,7 +388,7 @@
             <p>Skint Labs builds AI infrastructure for e-commerce. This post provides a technical overview of both products and the architecture decisions behind them.</p>
 
             <h2>Jerry: AI Customer Service for Shopify</h2>
-            <p>Jerry is a customer service platform that connects directly to a Shopify store's data layer. Rather than matching user queries against static FAQ documents, Jerry operates on live data &mdash; the product catalog, order records, return policies, and fulfilment status &mdash; through the Shopify Admin API.</p>
+            <p>Jerry is a customer service platform that connects directly to a Shopify store's data layer. Rather than matching user queries against static FAQ documents, Jerry operates on live data  -  the product catalog, order records, return policies, and fulfilment status  -  through the Shopify Admin API.</p>
             <p>The core of Jerry is a semantic search engine backed by vector embeddings. When a store installs Jerry, the entire product catalog is synced and embedded. Customer queries are matched by meaning rather than keywords, so a question like &ldquo;something warm for hiking under $80&rdquo; returns relevant, in-stock results.</p>
             <p>Order tracking is handled in real time. Jerry retrieves fulfilment status, carrier tracking data, and delivery estimates directly from Shopify. Returns and refunds are processed against the store's configured policies, with eligibility checks handled before any action is taken.</p>
             <p>The chat widget is built in React and TypeScript, isolated via shadow DOM so it doesn't interfere with the host storefront's styles or scripts. Voice input and output use the browser's Web Speech API with automatic language detection across 50+ languages. No external speech services are involved.</p>
@@ -402,7 +402,7 @@
             <p><strong>Sentinel Scan.</strong> An LLM-based binary classifier that evaluates messages the semantic router passes through. This layer targets sophisticated injection attempts that are semantically close to allowed topics but contain hidden instructions. The classifier runs on Groq and is only invoked when the semantic router score falls within an ambiguous range, keeping the per-request cost low.</p>
             <p><strong>Egress Filter.</strong> Scans LLM output before it reaches the user. Detects leaked API keys across 10+ provider formats, flags personally identifiable information, and checks for canary token presence. The canary token mechanism works by injecting a deterministic, session-unique string into the system prompt. If the string appears in the model's response, it indicates successful prompt extraction. This method produces zero false positives.</p>
             <p><strong>File Sanitizer.</strong> Validates uploaded files by magic byte signatures rather than file extensions, and strips EXIF metadata from images to prevent GPS and device data leakage.</p>
-            <p>The SDK is published on PyPI under the MIT license with 59 passing tests. It is LLM-agnostic and framework-agnostic &mdash; it functions as middleware between the user input and the model call. A hosted REST API is also available for teams that prefer an HTTP integration over a Python dependency.</p>
+            <p>The SDK is published on PyPI under the MIT license with 59 passing tests. It is LLM-agnostic and framework-agnostic  -  it functions as middleware between the user input and the model call. A hosted REST API is also available for teams that prefer an HTTP integration over a Python dependency.</p>
 
             <h2>Pricing</h2>
             <p>Jerry operates on a flat monthly subscription plus a per-resolution fee. Base is $49/month with 500 conversations included, Growth is $149/month with unlimited conversations, and Elite is $499/month with dedicated support. All tiers charge $0.25 per AI resolution. There is no revenue share. The first 150 customers receive 50% off for life.</p>
@@ -410,7 +410,7 @@
 
             <h2>Architecture Notes</h2>
             <p>Both products share the same near-black UI palette and deploy to Railway. Jerry's conversation engine uses a pipeline architecture where each stage (intent classification, entity extraction, data retrieval, response generation) operates independently and fails gracefully. If Pinecone is unreachable, Jerry falls back to keyword search. If the billing service is down, conversations continue and usage is reconciled later.</p>
-            <p>WonderwallAi is fail-open by default. If any protection layer encounters an error, the message passes through rather than blocking the user. This is a deliberate design choice &mdash; a security tool that degrades user experience during transient failures will be disabled by developers, which is worse than no security at all.</p>
+            <p>WonderwallAi is fail-open by default. If any protection layer encounters an error, the message passes through rather than blocking the user. This is a deliberate design choice  -  a security tool that degrades user experience during transient failures will be disabled by developers, which is worse than no security at all.</p>
 
             <div class="article-links">
                 <h3>Links</h3>
