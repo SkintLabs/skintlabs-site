@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-elite=1.0">
+    <title>Introducing Skint Labs  -  Jerry &amp; WonderwallAi  -  Skint Labs Blog</title>
+    <meta name="description" content="Skint Labs builds AI infrastructure for e-commerce. Jerry is an AI customer service platform for Shopify. WonderwallAi is an open-source AI firewall SDK with sub-2ms latency.">
+    <meta property="og:title" content="Introducing Skint Labs  -  Jerry &amp; WonderwallAi">
+    <meta property="og:description" content="AI customer service for Shopify and an open-source firewall SDK for LLM applications. Technical overview of both products.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://skintlabs.ai/blog/introducing-skint-labs.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Introducing Skint Labs  -  Jerry &amp; WonderwallAi">
+    <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+    <link rel="canonical" href="https://skintlabs.ai/blog/introducing-skint-labs.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Neon Future';
+            src: url('../../assets/NeonFuture.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --burnt-orange: #e76f51;
+            --coral: #f4a261;
+            --warm-sand: #e9c46a;
+            --deep-purple: #264653;
+            --terracotta: #c1666b;
+            --bg: #0c0b0a;
+            --bg-subtle: #141210;
+            --bg-card: #1e1b18;
+            --border: #2e2a25;
+            --border-hover: #3d3830;
+            --text: #d4b896;
+            --text-bright: #ede8e0;
+            --text-muted: #8a7d6e;
+            --gradient-sunset: linear-gradient(135deg, #e76f51 0%, #f4a261 40%, #e9c46a 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: var(--burnt-orange); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--coral); }
+
+        /* NAV */
+        .nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 0 32px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(12, 11, 10, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .nav-brand svg { width: 32px; height: auto; }
+        .nav-brand-text {
+            font-family: 'Neon Future', 'Inter', sans-serif;
+            font-size: 1.15rem;
+            letter-spacing: 3px;
+            background: var(--gradient-sunset);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+            align-items: center;
+        }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text-bright); }
+        .nav-links a.active { color: var(--burnt-orange); }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--text-muted);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        /* ARTICLE */
+        .article-wrapper {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 120px 24px 80px;
+        }
+
+        .article-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            transition: color 0.2s;
+        }
+        .article-back:hover { color: var(--burnt-orange); }
+
+        .article-meta {
+            margin-bottom: 32px;
+        }
+        .article-date {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+        }
+        .article-title {
+            font-family: 'Neon Future', 'Inter', sans-serif;
+            font-size: 2.2rem;
+            line-height: 1.2;
+            letter-spacing: 1px;
+            background: var(--gradient-sunset);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+        }
+        .article-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .article-divider {
+            width: 60px;
+            height: 2px;
+            background: var(--gradient-sunset);
+            border: none;
+            margin: 40px 0;
+            border-radius: 2px;
+        }
+
+        .article-content h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-bright);
+            margin: 48px 0 16px;
+            line-height: 1.3;
+        }
+
+        .article-content p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text);
+            margin-bottom: 20px;
+        }
+
+        .article-content strong {
+            color: var(--text-bright);
+            font-weight: 600;
+        }
+
+        .article-content blockquote {
+            border-left: 3px solid var(--burnt-orange);
+            padding: 16px 24px;
+            margin: 28px 0;
+            background: var(--bg-card);
+            border-radius: 0 12px 12px 0;
+        }
+        .article-content blockquote p {
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 0;
+        }
+
+        .article-content ul, .article-content ol {
+            margin: 16px 0 20px 24px;
+        }
+        .article-content li {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .article-links {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-top: 48px;
+        }
+        .article-links h3 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-bright);
+            margin-bottom: 16px;
+        }
+        .article-links p {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            margin-bottom: 8px;
+        }
+        .article-links p:last-child { margin-bottom: 0; }
+
+        .article-author {
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        /* FOOTER */
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 60px 0 40px;
+        }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .footer-brand svg { width: 28px; height: auto; }
+        .footer-brand-text {
+            font-family: 'Neon Future', 'Inter', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            background: var(--gradient-sunset);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .footer-tagline { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
+        .footer-heading {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-bright);
+            margin-bottom: 16px;
+        }
+        .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .footer-links a { color: var(--text-muted); font-size: 0.88rem; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--text-bright); }
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .footer-copy { font-size: 0.8rem; color: var(--text-muted); }
+        .footer-badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 6px 14px;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+        }
+        @media (max-width: 600px) {
+            .nav { padding: 0 16px; }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 64px; left: 0; right: 0;
+                flex-direction: column;
+                background: rgba(12, 11, 10, 0.95);
+                backdrop-filter: blur(20px);
+                padding: 24px;
+                gap: 20px;
+                border-bottom: 1px solid var(--border);
+            }
+            .nav-links.open { display: flex; }
+            .hamburger { display: flex; }
+            .article-wrapper { padding: 100px 16px 60px; }
+            .article-title { font-size: 1.6rem; }
+            .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+            .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav class="nav" role="navigation">
+        <a href="../" class="nav-brand">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" fill="none">
+                <defs>
+                    <filter id="ng" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceGraphic" stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                    <linearGradient id="njb" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a1815" stop-opacity="0.9"/><stop offset="100%" stop-color="#0d0c0a" stop-opacity="0.95"/></linearGradient>
+                    <clipPath id="njc"><rect x="50" y="95" width="100" height="120" rx="12"/></clipPath>
+                </defs>
+                <rect x="70" y="85" width="60" height="14" rx="3" fill="#2a2520" stroke="#3d3830" stroke-width="1.5"/>
+                <rect x="75" y="82" width="50" height="6" rx="2" fill="#3d3830"/>
+                <rect x="50" y="95" width="100" height="120" rx="12" fill="url(#njb)" stroke="#2e2a25" stroke-width="1.5"/>
+                <g clip-path="url(#njc)" filter="url(#ng)">
+                    <line x1="100" y1="105" x2="100" y2="205" stroke="#e76f51" stroke-width="1.8" opacity="0.7"/>
+                    <path d="M 85 120 Q 115 120, 115 135 Q 115 150, 85 150 Q 55 150, 85 165 Q 115 165, 115 180 Q 115 195, 85 195" stroke="#e76f51" stroke-width="2.5" fill="none" opacity="0.9" stroke-linecap="round"/>
+                </g>
+                <rect x="68" y="40" width="64" height="48" rx="6" fill="#4a4032" stroke="#3d3830" stroke-width="1"/>
+                <rect x="72" y="44" width="18" height="10" rx="2" fill="#e76f51" opacity="0.8" transform="rotate(-5, 81, 49)"/>
+                <rect x="95" y="42" width="16" height="9" rx="2" fill="#f4a261" opacity="0.8" transform="rotate(3, 103, 46)"/>
+                <rect x="115" y="46" width="14" height="8" rx="2" fill="#e9c46a" opacity="0.8" transform="rotate(-2, 122, 50)"/>
+                <circle cx="88" cy="66" r="4" fill="#0c0b0a"/><circle cx="112" cy="66" r="4" fill="#0c0b0a"/>
+                <circle cx="89" cy="65" r="1.2" fill="#ede8e0" opacity="0.6"/><circle cx="113" cy="65" r="1.2" fill="#ede8e0" opacity="0.6"/>
+                <line x1="92" y1="75" x2="108" y2="75" stroke="#0c0b0a" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span class="nav-brand-text">SKINT LABS</span>
+        </a>
+        <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="https://jerry.skintlabs.ai">Jerry</a></li>
+            <li><a href="https://wonderwallai.skintlabs.ai">WonderwallAi</a></li>
+            <li><a href="../#about">About</a></li>
+            <li><a href="./" class="active">Blog</a></li>
+            <li><a href="mailto:skintlabs@gmail.com">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- ARTICLE -->
+    <main class="article-wrapper">
+        <a href="./" class="article-back">&larr; Back to Blog</a>
+
+        <div class="article-meta">
+            <div class="article-date">March 26, 2026</div>
+            <h1 class="article-title">Introducing Skint Labs</h1>
+            <p class="article-subtitle">AI customer service infrastructure for Shopify and an open-source firewall SDK for LLM applications.</p>
+        </div>
+
+        <hr class="article-divider">
+
+        <div class="article-content">
+            <p>Skint Labs builds AI infrastructure for e-commerce. This post provides a technical overview of both products and the architecture decisions behind them.</p>
+
+            <h2>Jerry: AI Customer Service for Shopify</h2>
+            <p>Jerry is a customer service platform that connects directly to a Shopify store's data layer. Rather than matching user queries against static FAQ documents, Jerry operates on live data &mdash; the product catalog, order records, return policies, and fulfilment status &mdash; through the Shopify Admin API.</p>
+            <p>The core of Jerry is a semantic search engine backed by vector embeddings. When a store installs Jerry, the entire product catalog is synced and embedded. Customer queries are matched by meaning rather than keywords, so a question like &ldquo;something warm for hiking under $80&rdquo; returns relevant, in-stock results.</p>
+            <p>Order tracking is handled in real time. Jerry retrieves fulfilment status, carrier tracking data, and delivery estimates directly from Shopify. Returns and refunds are processed against the store's configured policies, with eligibility checks handled before any action is taken.</p>
+            <p>The chat widget is built in React and TypeScript, isolated via shadow DOM so it doesn't interfere with the host storefront's styles or scripts. Voice input and output use the browser's Web Speech API with automatic language detection across 50+ languages. No external speech services are involved.</p>
+            <p>Revenue attribution is tracked through a 24-hour attribution window. When a customer interacts with Jerry and subsequently places an order, the conversation is linked to the sale via Shopify's order creation webhooks. This gives store owners a direct measurement of the platform's return on investment. Jerry is also trained to cross-sell and up-sell based on what is in the customer's cart and browsing context.</p>
+            <p>The backend runs Python and FastAPI, with Groq serving Llama 3 as the language model, Pinecone for vector storage, and Stripe handling subscription billing. Deployment is on Railway with continuous deployment from the main branch.</p>
+
+            <h2>WonderwallAi: Open-Source AI Firewall</h2>
+            <p>WonderwallAi is a Python SDK that provides input and output scanning for LLM applications. It was originally developed as Jerry's internal security layer after prompt injection and data exfiltration attempts were observed in production.</p>
+            <p>The architecture uses four distinct layers, each targeting a different threat category.</p>
+            <p><strong>Semantic Router.</strong> Computes cosine similarity between the incoming message and a configurable set of allowed topics using the all-MiniLM-L6-v2 embedding model. Topics are defined in plain English. The computation is local, requires no API calls, and completes in under 2ms. Messages that fall below the similarity threshold are rejected before reaching the LLM.</p>
+            <p><strong>Sentinel Scan.</strong> An LLM-based binary classifier that evaluates messages the semantic router passes through. This layer targets sophisticated injection attempts that are semantically close to allowed topics but contain hidden instructions. The classifier runs on Groq and is only invoked when the semantic router score falls within an ambiguous range, keeping the per-request cost low.</p>
+            <p><strong>Egress Filter.</strong> Scans LLM output before it reaches the user. Detects leaked API keys across 10+ provider formats, flags personally identifiable information, and checks for canary token presence. The canary token mechanism works by injecting a deterministic, session-unique string into the system prompt. If the string appears in the model's response, it indicates successful prompt extraction. This method produces zero false positives.</p>
+            <p><strong>File Sanitizer.</strong> Validates uploaded files by magic byte signatures rather than file extensions, and strips EXIF metadata from images to prevent GPS and device data leakage.</p>
+            <p>The SDK is published on PyPI under the MIT license with 59 passing tests. It is LLM-agnostic and framework-agnostic &mdash; it functions as middleware between the user input and the model call. A hosted REST API is also available for teams that prefer an HTTP integration over a Python dependency.</p>
+
+            <h2>Pricing</h2>
+            <p>Jerry operates on a flat monthly subscription plus a per-resolution fee. Base is $49/month with 500 conversations included, Growth is $149/month with unlimited conversations, and Elite is $499/month with dedicated support. All tiers charge $0.25 per AI resolution. There is no revenue share. The first 150 customers receive 50% off for life.</p>
+            <p>WonderwallAi's SDK is free and open source. The hosted API offers a free tier at 1,000 scans/month, with paid plans at $19/month (50K scans), $99/month (500K scans), and $249/month (2M scans). The first 300 paying customers receive 50% off for life.</p>
+
+            <h2>Architecture Notes</h2>
+            <p>Both products share the same near-black UI palette and deploy to Railway. Jerry's conversation engine uses a pipeline architecture where each stage (intent classification, entity extraction, data retrieval, response generation) operates independently and fails gracefully. If Pinecone is unreachable, Jerry falls back to keyword search. If the billing service is down, conversations continue and usage is reconciled later.</p>
+            <p>WonderwallAi is fail-open by default. If any protection layer encounters an error, the message passes through rather than blocking the user. This is a deliberate design choice &mdash; a security tool that degrades user experience during transient failures will be disabled by developers, which is worse than no security at all.</p>
+
+            <div class="article-links">
+                <h3>Links</h3>
+                <p><strong>Jerry The Customer Service Bot:</strong> <a href="https://jerry.skintlabs.ai">jerry.skintlabs.ai</a> &nbsp;|&nbsp; <a href="https://sunsetbot-production.up.railway.app/static/demo.html">Live Demo</a></p>
+                <p><strong>WonderwallAi:</strong> <a href="https://wonderwallai.skintlabs.ai">wonderwallai.skintlabs.ai</a> &nbsp;|&nbsp; <a href="https://github.com/SkintLabs/WonderwallAi">GitHub</a> &nbsp;|&nbsp; <a href="https://pypi.org/project/wonderwallai/">PyPI</a></p>
+                <p><strong>Skint Labs:</strong> <a href="https://skintlabs.ai">skintlabs.ai</a></p>
+            </div>
+
+            <p class="article-author">Built by Louis Constant.</p>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" fill="none">
+                            <defs>
+                                <filter id="fg" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceGraphic" stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                                <linearGradient id="fjb" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a1815" stop-opacity="0.9"/><stop offset="100%" stop-color="#0d0c0a" stop-opacity="0.95"/></linearGradient>
+                                <clipPath id="fjc"><rect x="50" y="95" width="100" height="120" rx="12"/></clipPath>
+                            </defs>
+                            <rect x="70" y="85" width="60" height="14" rx="3" fill="#2a2520" stroke="#3d3830" stroke-width="1.5"/>
+                            <rect x="75" y="82" width="50" height="6" rx="2" fill="#3d3830"/>
+                            <rect x="50" y="95" width="100" height="120" rx="12" fill="url(#fjb)" stroke="#2e2a25" stroke-width="1.5"/>
+                            <g clip-path="url(#fjc)" filter="url(#fg)">
+                                <line x1="100" y1="105" x2="100" y2="205" stroke="#e76f51" stroke-width="1.8" opacity="0.7"/>
+                                <path d="M 85 120 Q 115 120, 115 135 Q 115 150, 85 150 Q 55 150, 85 165 Q 115 165, 115 180 Q 115 195, 85 195" stroke="#e76f51" stroke-width="2.5" fill="none" opacity="0.9" stroke-linecap="round"/>
+                            </g>
+                            <rect x="68" y="40" width="64" height="48" rx="6" fill="#4a4032" stroke="#3d3830" stroke-width="1"/>
+                            <rect x="72" y="44" width="18" height="10" rx="2" fill="#e76f51" opacity="0.8" transform="rotate(-5, 81, 49)"/>
+                            <rect x="95" y="42" width="16" height="9" rx="2" fill="#f4a261" opacity="0.8" transform="rotate(3, 103, 46)"/>
+                            <rect x="115" y="46" width="14" height="8" rx="2" fill="#e9c46a" opacity="0.8" transform="rotate(-2, 122, 50)"/>
+                            <circle cx="88" cy="66" r="4" fill="#0c0b0a"/><circle cx="112" cy="66" r="4" fill="#0c0b0a"/>
+                            <circle cx="89" cy="65" r="1.2" fill="#ede8e0" opacity="0.6"/><circle cx="113" cy="65" r="1.2" fill="#ede8e0" opacity="0.6"/>
+                            <line x1="92" y1="75" x2="108" y2="75" stroke="#0c0b0a" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span class="footer-brand-text">SKINT LABS</span>
+                    </div>
+                    <p class="footer-tagline">AI-powered tools for the next generation of e-commerce. Built lean, built smart.</p>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Products</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://jerry.skintlabs.ai">Jerry</a></li>
+                        <li><a href="https://wonderwallai.skintlabs.ai">WonderwallAi</a></li>
+                        <li><a href="https://sunsetbot-production.up.railway.app/static/demo.html">Jerry Demo</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Open Source</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://github.com/SkintLabs/WonderwallAi">WonderwallAi GitHub</a></li>
+                        <li><a href="https://pypi.org/project/wonderwallai/">PyPI Package</a></li>
+                        <li><a href="https://github.com/SkintLabs/Jerry-The-Customer-Service-Bot">Jerry GitHub</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="../#about">About</a></li>
+                        <li><a href="./">Blog</a></li>
+                        <li><a href="mailto:skintlabs@gmail.com">skintlabs@gmail.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-copy">&copy; 2026 Skint Labs. All rights reserved.</div>
+                <div class="footer-badge">A Skint Labs Production</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-links').classList.remove('open');
+            });
+        });
+    </script>
+</body>
+</html>
