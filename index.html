@@ -35,6 +35,13 @@
             font-style: normal;
             font-display: swap;
         }
+        @font-face {
+            font-family: 'DeathStar';
+            src: url('assets/Death Star.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
 
         :root {
             --burnt-orange: #e76f51;
@@ -52,6 +59,12 @@
             --text-bright: #ede8e0;
             --text-muted: #8a7d6e;
             --gradient-sunset: linear-gradient(135deg, #e76f51 0%, #f4a261 40%, #e9c46a 100%);
+            --gradient-jerry: linear-gradient(135deg, #c1666b 0%, #d4a040 100%);
+            --gradient-ww: linear-gradient(135deg, #2a7f8a 0%, #3eb8c8 60%, #7edce8 100%);
+            --jerry-glow: rgba(193, 102, 107, 0.22);
+            --ww-glow: rgba(62, 184, 200, 0.18);
+            --ww-color: #3eb8c8;
+            --ww-color-dim: rgba(62, 184, 200, 0.12);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -174,26 +187,33 @@
         .hero::before {
             content: '';
             position: absolute;
-            width: 600px;
-            height: 600px;
+            width: 700px;
+            height: 700px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(231, 111, 81, 0.06) 0%, rgba(244, 162, 97, 0.03) 40%, transparent 70%);
+            background: radial-gradient(circle, rgba(231, 111, 81, 0.18) 0%, rgba(244, 162, 97, 0.08) 40%, transparent 70%);
             top: 50%;
             left: 50%;
             transform: translate(-50%, -55%);
             pointer-events: none;
+            animation: heroPulse 6s ease-in-out infinite;
         }
 
         .hero::after {
             content: '';
             position: absolute;
-            width: 400px;
-            height: 400px;
+            width: 500px;
+            height: 500px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(38, 70, 83, 0.06) 0%, transparent 70%);
-            top: 30%;
-            left: 20%;
+            background: radial-gradient(circle, rgba(62, 184, 200, 0.1) 0%, transparent 70%);
+            top: 25%;
+            left: 15%;
             pointer-events: none;
+            animation: heroPulse 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes heroPulse {
+            0%, 100% { opacity: 0.7; transform: translate(-50%, -55%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -55%) scale(1.08); }
         }
 
         .hero-content {
@@ -211,8 +231,13 @@
             width: 180px;
             height: auto;
             margin-bottom: 8px;
-            animation: float 4s ease-in-out infinite;
-            filter: drop-shadow(0 20px 40px rgba(231, 111, 81, 0.08));
+            animation: float 4s ease-in-out infinite, mascotGlow 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(231, 111, 81, 0.55)) drop-shadow(0 20px 50px rgba(244, 162, 97, 0.35));
+        }
+
+        @keyframes mascotGlow {
+            0%, 100% { filter: drop-shadow(0 0 25px rgba(231, 111, 81, 0.5)) drop-shadow(0 20px 50px rgba(244, 162, 97, 0.3)); }
+            50% { filter: drop-shadow(0 0 50px rgba(231, 111, 81, 0.8)) drop-shadow(0 20px 60px rgba(233, 196, 106, 0.5)); }
         }
 
         @keyframes float {
@@ -243,10 +268,11 @@
         }
 
         .hero-subtitle {
-            font-size: 1.15rem;
-            color: var(--text);
+            font-size: 1.2rem;
+            color: var(--text-bright);
             max-width: 540px;
             line-height: 1.7;
+            font-weight: 500;
         }
 
         .hero-buttons {
@@ -382,12 +408,31 @@
             transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
             display: flex;
             flex-direction: column;
+            position: relative;
+            overflow: hidden;
         }
 
-        .product-card:hover {
-            border-color: var(--border-hover);
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .product-card.jerry-card::before { background: var(--gradient-jerry); }
+        .product-card.ww-card::before    { background: var(--gradient-ww); }
+
+        .product-card.jerry-card:hover {
+            border-color: rgba(193, 102, 107, 0.4);
             transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 12px 40px var(--jerry-glow);
+        }
+
+        .product-card.ww-card:hover {
+            border-color: rgba(62, 184, 200, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px var(--ww-glow);
         }
 
         .product-tag {
@@ -402,23 +447,35 @@
             width: fit-content;
         }
 
-        .tag-jerry { background: rgba(193, 102, 107, 0.15); color: #d07478; }
-        .tag-wonderwall { background: rgba(231, 111, 81, 0.12); color: var(--coral); }
+        .tag-jerry { background: rgba(193, 102, 107, 0.18); color: #e08888; }
+        .tag-wonderwall { background: rgba(62, 184, 200, 0.15); color: var(--ww-color); }
 
         .product-name {
-            font-family: 'Create Future', 'Inter', sans-serif;
-            font-size: 1.4rem;
-            letter-spacing: 2px;
-            background: var(--gradient-sunset);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-family: 'DeathStar', 'Inter', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
             margin-bottom: 12px;
         }
 
+        .jerry-card .product-name {
+            background: var(--gradient-jerry);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .ww-card .product-name {
+            background: var(--gradient-ww);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         .product-desc {
-            color: var(--text);
+            color: var(--text-bright);
             font-size: 0.95rem;
+            font-weight: 450;
             line-height: 1.7;
             margin-bottom: 20px;
         }
@@ -652,9 +709,9 @@
         }
 
         .pricing-card-title {
-            font-family: 'Create Future', 'Inter', sans-serif;
-            font-size: 1.2rem;
-            letter-spacing: 2px;
+            font-family: 'DeathStar', 'Inter', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
             background: var(--gradient-sunset);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -1214,7 +1271,7 @@
             </div>
 
             <div class="products-grid">
-                <div class="product-card fade-in">
+                <div class="product-card jerry-card fade-in">
                     <span class="product-tag tag-jerry">AI Customer Service</span>
                     <h3 class="product-name">JERRY</h3>
                     <p class="product-desc">The Customer Service Bot for Shopify. Jerry connects to your store's data to answer customer questions 24/7 with real, accurate information.</p>
@@ -1232,9 +1289,12 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in">
+                <div class="product-card ww-card fade-in">
                     <span class="product-tag tag-wonderwall">LLM Security</span>
-                    <h3 class="product-name">WONDERWALL AI</h3>
+                    <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+                        <img src="assets/wonderwallai-logo.png" alt="WonderwallAi" style="width:52px;height:52px;object-fit:contain;filter:drop-shadow(0 0 10px rgba(62,184,200,0.5));border-radius:50%;">
+                        <h3 class="product-name" style="margin-bottom:0">WONDERWALL AI</h3>
+                    </div>
                     <p class="product-desc">An AI firewall SDK and hosted API that protects LLM-powered applications from prompt injection, data exfiltration, and off-topic abuse.</p>
                     <ul class="feature-list wonderwall-features">
                         <li>4-layer protection pipeline</li>
